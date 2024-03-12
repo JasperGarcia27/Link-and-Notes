@@ -1,0 +1,36 @@
+https://docs.google.com/document/d/1mBGvH4NLxDr3NU64JxmXCiJz1bFZSDZ_NpDiqk08oso/edit?usp=sharing
+
+https://drive.google.com/drive/folders/1X0VvDKIMlQFjwTsc0hAynlXb7FG5fE6T
+
+Steps:
+1. Creating a laravel project: 
+	composer create-project laravel/laravel laravel-blog
+
+2. Running the app:
+	php artisan serve
+
+3. Generating the authentication scaffolding:
+	a. install Laravel's laravel/ui package: 
+		composer require laravel/ui
+
+	b. then build the authentication scaffolding:
+		php artisan ui bootstrap --auth
+
+	c. compile the fresh scaffolding:
+		npm install && npm run dev
+
+4. Creating the Post model:
+	php artisan make:model Post -mc
+		*m - migration
+		*c - controller
+
+5. Add the database credentials correctly set in the .env file
+	DB_CONNECTION=mysql
+	DB_HOST=127.0.0.1
+	DB_PORT=3306
+	DB_DATABASE=laravel_blog
+	DB_USERNAME=root
+	DB_PASSWORD=
+
+6. Run migrations to create the tables in the database
+	php artisan migrate
