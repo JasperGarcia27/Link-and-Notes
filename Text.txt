@@ -1,6 +1,6 @@
-https://docs.google.com/document/d/1mBGvH4NLxDr3NU64JxmXCiJz1bFZSDZ_NpDiqk08oso/edit?usp=sharing
-
-https://drive.google.com/drive/folders/1X0VvDKIMlQFjwTsc0hAynlXb7FG5fE6T
+- https://docs.google.com/document/d/1mBGvH4NLxDr3NU64JxmXCiJz1bFZSDZ_NpDiqk08oso/edit?usp=sharing
+- https://www.interviewsolutionshub.com/blog/how-to-use-ckeditor-laravel
+- https://drive.google.com/drive/folders/1X0VvDKIMlQFjwTsc0hAynlXb7FG5fE6T
 
 Steps:
 1. Creating a laravel project: 
