@@ -2,6 +2,9 @@
 - https://www.interviewsolutionshub.com/blog/how-to-use-ckeditor-laravel
 - https://drive.google.com/drive/folders/1X0VvDKIMlQFjwTsc0hAynlXb7FG5fE6T
 
+~~~~~ UNDER REVIEW ~~~~~
+=> https://www.youtube.com/watch?v=9D7BxfgeDo8
+
 Steps:
 1. Creating a laravel project: 
 	composer create-project laravel/laravel laravel-blog
