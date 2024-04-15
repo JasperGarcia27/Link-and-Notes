@@ -5,6 +5,12 @@
 material-dashboard-laravel
 - https://github.com/creativetimofficial/material-dashboard-laravel
 
+argon-dashboard-laravel
+- https://github.com/creativetimofficial/argon-dashboard-laravel
+
+materio-bootstrap-html-laravel-admin-template-free
+- https://github.com/themeselection/materio-bootstrap-html-laravel-admin-template-free
+
 ~~~~~ UNDER REVIEW ~~~~~
 => https://www.youtube.com/watch?v=9D7BxfgeDo8
 => https://www.youtube.com/watch?v=nwnp3L4Oy-Q
