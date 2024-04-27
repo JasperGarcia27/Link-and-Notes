@@ -2,6 +2,11 @@
 - https://www.interviewsolutionshub.com/blog/how-to-use-ckeditor-laravel
 - https://drive.google.com/drive/folders/1X0VvDKIMlQFjwTsc0hAynlXb7FG5fE6T
 
+Screen
+- https://fakeupdate.net/
+- https://geekprank.com/hacker/
+
+
 material-dashboard-laravel
 - https://github.com/creativetimofficial/material-dashboard-laravel
 
