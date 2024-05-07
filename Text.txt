@@ -21,6 +21,14 @@ materio-bootstrap-html-laravel-admin-template-free
 => https://www.youtube.com/watch?v=nwnp3L4Oy-Q
 => https://www.youtube.com/watch?v=4z6pLjkQMhA&t=675s
 
+
+
+===== JAVASCRIPT =====
+https://codepen.io/chriscoyier/pen/NWMQQoL
+
+
+
+
 Steps:
 1. Creating a laravel project: 
 	composer create-project laravel/laravel laravel-blog
