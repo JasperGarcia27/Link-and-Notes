@@ -62,3 +62,78 @@ Steps:
 
 6. Run migrations to create the tables in the database
 	php artisan migrate
+
+
+
+
+
+STEPS FOR SWEETALERT2 FOR LARAVEL
+
+1. Install the Package
+    - composer require realrashid/sweet-alert
+
+2. Configure the Package
+Add the service provider to your config/app.php file:
+'providers' => [
+    RealRashid\SweetAlert\SweetAlertServiceProvider::class,
+],
+
+'aliases' => [
+    'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
+],
+
+3. Publish Configuration (Optional)
+    - php artisan vendor:publish --provider="RealRashid\SweetAlert\SweetAlertServiceProvider"
+This command will create a sweetalert.php file in the config directory.
+
+4. Using SweetAlert
+- Example in a Controller:
+use RealRashid\SweetAlert\Facades\Alert;
+
+public function store(Request $request)
+{
+    // Your code logic
+
+    Alert::success('Success Title', 'Success Message');
+    
+    return redirect()->back();
+}
+
+- Example in a Blade View:
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Other head content -->
+</head>
+<body>
+    @include('sweetalert::alert')
+    <!-- Other body content -->
+</body>
+</html>
+
+5. Costumise sweetalert2
+
+- Example in a Controller:
+session()->flash('alert.toast', [
+    'icon' => 'success',
+    'title' => 'Area has been successfully added.'
+]);
+
+- Example in a Blade View:
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Other head content -->
+</head>
+<body>
+    @include('sweetalert::alert')
+    <!-- Other body content -->
+</body>
+</html>
+
+Go to views/vendor/sweetalert/alert.blade.php
+replace this in line 1
+    - @if (config('sweetalert.alwaysLoadJS') === true || Session::has('alert.config') || Session::has('alert.delete') || Session::has('alert.toast'))
+
+
+
