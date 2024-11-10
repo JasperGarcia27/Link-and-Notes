@@ -1,0 +1,15 @@
+Change Timezone for Laravel Project
+
+
+
+- Open the config/app.php file in your Laravel project.
+
+- Locate the timezone setting within this file.
+
+- Change the timezone setting to "Asia/Manila" like this:
+	'timezone' => 'Asia/Manila',
+
+- Save
+
+- Go in git bash the put this 
+	php artisan config:cache
