@@ -26,7 +26,25 @@ materio-bootstrap-html-laravel-admin-template-free
 ===== JAVASCRIPT =====
 https://codepen.io/chriscoyier/pen/NWMQQoL
 
+=================================================================================
+php artisan view:clear
+What It Clears	
+- Compiled Blade templates
+When to Use
+- View changes don't reflect.
 
+php artisan cache:clear	
+What It Clears	
+- Application cache (routes, user data)	
+When to Use
+- App behaves unpredictably or doesn't reflect route/data changes.
+
+php artisan config:clear
+What It Clears		
+- Cached configuration and .env values	
+When to Use
+- Changes to .env or config files aren't taking effect.
+=================================================================================
 
 
 Steps:
