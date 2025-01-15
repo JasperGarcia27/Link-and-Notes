@@ -1,0 +1,94 @@
+STEPS FOR BLOCK USER ACCOUNT
+
+I. Add this to users migration
+	- $table->boolean('isBlock')->default(0);
+
+II. Put this on app/Http/Controllers/Auth/LoginController.php
+
+<?php
+
+namespace App\Http\Controllers\Auth;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
+
+class LoginController extends Controller
+{
+    use AuthenticatesUsers;
+
+    protected $redirectTo = '/home';
+
+    public function __construct()
+    {
+        $this->middleware('guest')->except('logout');
+    }
+
+    /**
+     * Attempt to log in the user and check if their account is blocked.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return bool
+     */
+    protected function attemptLogin(Request $request)
+    {
+        $user = \App\Models\User::where($this->username(), $request->{$this->username()})->first();
+
+        // Check if the user is blocked
+        if ($user && $user->isBlock) {
+            throw ValidationException::withMessages([
+                $this->username() => ['Your account is blocked. Please contact support.'],
+            ]);
+        }
+
+        // Proceed with the default login attempt
+        return $this->guard()->attempt(
+            $this->credentials($request),
+            $request->filled('remember')
+        );
+    }
+}
+
+III. Put this code in terminal
+	- php artisan make:middleware BlockedAccountCheck
+
+IV. Put this inside of app/Http/Middleware/BlockedAccountCheck.php
+
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
+
+class BlockedAccountCheck
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     */
+    public function handle($request, Closure $next)
+    {
+        // Check if the user is authenticated and blocked
+        if (Auth::check() && Auth::user()->isBlock) {
+            Auth::logout(); // Log the user out
+            return redirect('/login')->withErrors([
+                'email' => 'Your account is blocked. Please contact support.',
+            ]);
+        }
+
+        return $next($request); // Allow the request to proceed
+    } 
+}
+
+V. Go to  app/Http/Kernel.php and inside of this protected $middlewareAliases = [] add this code
+	- 'blocked' => \App\Http\Middleware\BlockedAccountCheck::class,
+
+VI. Overriding the the login routes put this in routes
+	- use App\Http\Controllers\Auth\LoginController;
+	- Route::post('login', [LoginController::class, 'login'])->middleware('blocked');
+
