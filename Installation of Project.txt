@@ -1,0 +1,14 @@
+Installation of Project
+
+- install laragon
+
+- put "php-8.2.20-nts-Win32-vs16-x64" inside of "C:\laragon\bin\php"
+
+- change php version on Laravel 
+	- menu\PHP\Version
+
+- put the project inside of "C:\laragon\www"
+
+- click start all
+
+- in browser put {ip address of the device}\{project folder name}
