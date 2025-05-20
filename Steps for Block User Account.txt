@@ -92,3 +92,66 @@ VI. Overriding the the login routes put this in routes
 	- use App\Http\Controllers\Auth\LoginController;
 	- Route::post('login', [LoginController::class, 'login'])->middleware('blocked');
 
+
+
+FOR RESTRICT AND UNRESTRICT FEATURES
+
+I. In .env edit "SESSION_DRIVER=file" to this
+    - SESSION_DRIVER=database
+
+II. run in terminal one at a time
+    - php artisan session:table
+    - php artisan migrate
+
+III. Controller setup
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
+use App\Models\User;
+
+
+
+class UserController extends Controller
+{
+    // DELETE
+    public function restrict($id)
+    {
+        $account = User::find($id);
+        if(Auth::user()->isAdmin == 1) {
+            $account->isBlock = 1;
+            $account->update();  
+        }
+
+        $idNum = sprintf('%05d', $account->id);
+
+        // Delete all sessions of this user
+        // Automatic logout in all devices
+        DB::table('sessions')->where('user_id', $account->id)->delete();
+
+
+        Alert::success('Restricted Account', "The #$idNum account has been restricted.");
+        return redirect()->back();
+    }
+    
+    // DELETE
+    public function unrestrict($id)
+    {
+        $account = User::find($id);
+        if(Auth::user()->isAdmin == 1) {
+            $account->isBlock = 0;
+            $account->update();  
+        }
+
+        $idNum = sprintf('%05d', $account->id);
+
+        Alert::success('Unrestricted Account', "The #$idNum account has been unrestricted.");
+        return redirect()->back();
+    }
+    
+}
