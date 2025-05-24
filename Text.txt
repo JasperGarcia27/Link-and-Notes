@@ -214,5 +214,10 @@ replace this content
 @endif
 
 
+To change the timezone for your Laravel project to the Philippines timezone (Asia/Manila), follow these steps:
 
-
+I. Edit the config/app.php file:
+    - 'timezone' => 'Asia/Manila',
+    then put this in terminal
+    - php artisan config:clear
+    - php artisan config:cache
