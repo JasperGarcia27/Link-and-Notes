@@ -16,3 +16,11 @@ Installation of Project
 
 - inside the laravel project put this on terminal (gitbash) "php artisan config:clear"
 - make sure that have the proper db on web server
+
+- you may check also the php path 
+	- click windows + S and type "edit the system environment variables"
+	- click "Environment Variables..."
+	- choose "path" and click edit
+	- then browse it if is the php path is there else click new
+	- then click all ok
+	- restart the terminal/vs code
