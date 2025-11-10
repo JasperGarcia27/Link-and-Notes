@@ -11,4 +11,8 @@ Installation of Project
 
 - click start all
 
+
 - in browser put {ip address of the device}\{project folder name}
+
+- inside the laravel project put this on terminal (gitbash) "php artisan config:clear"
+- make sure that have the proper db on web server
