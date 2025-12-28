@@ -1,31 +1,113 @@
-for installation of Excel "use Maatwebsite\Excel\Facades\Excel;"
+Step 1: Install the Library
+Run this command in your terminal:
+	- composer require maatwebsite/excel
 
-1. Install Laravel Excel
-	Inside your Laravel project folder run:
-	-  composer require maatwebsite/excel
+Step 2: Create an Import Class
+We need a class that tells Laravel how to handle the data from the Excel file. Run:
+	- php artisan make:import AttendanceImport --model=Attendance
 
-2. Verify installation
-	composer show maatwebsite/excel
+Open app/Imports/AttendanceImport.php and update it to match your columns. Note that Excel headers often use underscores or specific names:
+    <?php
 
-3. Add the import in Controller
-	use Maatwebsite\Excel\Facades\Excel;
+    namespace App\Imports;
 
-	In Controller
-	<?php
+    use App\Models\Attendance;
+    use Maatwebsite\Excel\Concerns\ToModel;
+    use Maatwebsite\Excel\Concerns\WithHeadingRow;
+    use Carbon\Carbon;
 
-	namespace App\Http\Controllers;
+    class AttendanceImport implements ToModel, WithHeadingRow
+    {
+        public function model(array $row)
+        {
+            return new Attendance([
+                'id_number' => $row['id_number'],
+                'date'      => $this->parseExcelDate($row['date']),
+                'time_in'   => $this->parseExcelTime($row['time_in']),
+                'time_out'  => $this->parseExcelTime($row['time_out']),
+            ]);
+        }
 
-	use Illuminate\Http\Request;
-	use Maatwebsite\Excel\Facades\Excel;   // <--- This must exist
+        private function parseExcelDate($value)
+        {
+            if (empty($value)) return null;
 
-	class PayrollController extends Controller
-	{
-    	      //
-	}
-4. Clear Laravel caches
-	- php artisan config:clear
-	- php artisan cache:clear
-	- php artisan optimize:clear
-	- composer dump-autoload
+            // If it's a numeric Excel date (e.g. 45180)
+            if (is_numeric($value)) {
+                return \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($value)->format('Y-m-d');
+            }
+
+            // If it's already a string (e.g. "9/30/2025")
+            return Carbon::parse($value)->format('Y-m-d');
+        }
+
+        private function parseExcelTime($value)
+        {
+            if (empty($value)) return null;
+
+            if (is_numeric($value)) {
+                return \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($value)->format('H:i:s');
+            }
+
+            return Carbon::parse($value)->format('H:i:s');
+        }
+    }
 
 
+Step 3: Update your Controller
+Now, update your store method to handle the file upload and trigger the import.
+    <?php
+
+    namespace App\Http\Controllers;
+
+    use App\Imports\AttendanceImport;
+    use Illuminate\Http\Request;
+    use Maatwebsite\Excel\Facades\Excel;
+    use Illuminate\Support\Facades\Auth;
+
+
+    class AttendanceController extends Controller
+    {
+        public function store(Request $request) 
+        {
+            // Check if the file actually exists in the request
+            if ($request->hasFile('attendance')) {
+                $file = $request->file('attendance');
+                
+                // This will show you the file name and size for debugging
+                // dd($file->getClientOriginalName()); 
+                
+                Excel::import(new AttendanceImport, $file);
+                return back()->with('success', 'File received and imported!');
+            }
+
+            return back()->with('error', 'No file was uploaded. Check your enctype!');
+        }
+    }
+
+Step 4: Fix the Form & Route
+    <form action="{{url('/upload/attendance')}}" method="POST" enctype="multipart/form-data">
+        @csrf
+        <div class="input-group mb-3">
+            <input type="file" class="form-control" name="attendance" accept=".xlsx,.xls">
+            <button class="btn btn-success" type="submit">Submit</button> 
+        </div>
+    </form>
+
+
+
+================ FOR TROUBLESHOOTING ================
+The error is telling you that your PHP environment is missing two critical extensions required for handling Excel and images: GD and Zip. Since you are using Laragon, this is very easy to fix.
+
+Step 1: Enable PHP Extensions in Laragon
+You don't need to run commands to fix this; you just need to turn them on in the Laragon interface:
+    1. Open the Laragon control panel.
+    2. Click Menu (or right-click anywhere).
+    3. Navigate to PHP > Extensions.
+    4. Find gd in the list and click it (a checkmark should appear).
+    5. Find zip in the list and click it (a checkmark should appear).
+    6. Restart Laragon Services (Click Stop, then Start).
+
+Step 2: Install the Package Again
+Now that the extensions are active, run the install command again. I've added --with-all-dependencies to ensure it picks the right version for your PHP 8.2:
+    - composer require maatwebsite/excel --with-all-dependencies
