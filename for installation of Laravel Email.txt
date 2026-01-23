@@ -1,0 +1,140 @@
+STEP 1: Create a Laravel Project
+
+    Bash
+    composer create-project laravel/laravel your-project-name
+
+STEP 2: Generate a Gmail App Password
+    - Go to "google.com" then click your profile on the top right side and click "Manage your Google Account"
+
+    - Click "Security & sign-in
+    - Click "2-Step Verification, then enter password of your google account
+    - Scroll down go to "App passwords"
+                    or
+    - Go to search bar then put "App Password"
+
+    - Enter a App name, then click create
+        - This app name will serve as the sender name in the email.
+    - Copy the Generated app password to MAIL_PASSWORD=""
+
+STEP 3: Configure the .env File
+Open your .env file in the root directory and update the mail settings with the following values:
+
+    APP_NAME="User Name" //Change what do you want user name
+
+    MAIL_MAILER=smtp
+    MAIL_HOST=smtp.gmail.com
+    # MAIL_PORT=1025
+    MAIL_PORT=465
+    MAIL_USERNAME=jsprgrc548@gmail.com #email that used to sent email
+    MAIL_PASSWORD="ouue prav apts lvzl" #password generated from google app password
+    MAIL_ENCRYPTION=tls
+    MAIL_FROM_ADDRESS="jsprgrc548@gmail.com" #email that used to sent email
+    MAIL_FROM_NAME="${APP_NAME}"
+
+    
+STEP 4: Create a Mailable Class
+Run the following Artisan command to create the email logic:
+
+    Bash
+    php artisan make:mail MyTestEmail
+    
+    This file will be located in the app/Mail/MyTestEmail.php directory.
+
+
+STEP 5: Set Up the Route to Send Email
+Open routes/web.php and create a route to trigger the email. You will need to:
+
+<?php
+
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MyTestEmail;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('/testroute', function () {
+    $name = "Funny Coder";
+
+    // Mail::to('jsprgrc548@gmail.com')->send(new MyTestEmail($name));
+    Mail::to('jaspergarcia2715@gmail.com')->send(new MyTestEmail($name));
+
+    return "Test email sent successfully!";
+});
+
+STEP 6: Set Up the app/Mail/MyTestEmail.php
+<?php
+
+namespace App\Mail;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Queue\SerializesModels;
+
+class MyTestEmail extends Mailable
+{
+    use Queueable, SerializesModels;
+
+    /**
+     * Create a new message instance.
+     */
+    public function __construct(private string $name)
+    {
+        //
+    }
+
+    /**
+     * Get the message envelope.
+     */
+    public function envelope(): Envelope
+    {
+        return new Envelope(
+            subject: 'My Test Email',
+        );
+    }
+
+    /**
+     * Get the message content definition.
+     */
+    public function content(): Content
+    {
+        return new Content(
+            view: 'mail.test-email', //directory of the views
+            with: ['name' => $this->name]
+        );
+    }
+
+    /**
+     * Get the attachments for the message.
+     *
+     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     */
+    public function attachments(): array
+    {
+        return [];
+    }
+}
+
+STEP 7: Go to views, create this mail/test-email.blade.php and put this sample code
+    Hey {{$name}},
+    Can your Laravel App send emails yet? ;)
+
+
+
+STEP 8: Test the Configuration
+Start your local server and visit the route you created "/testroute". Check your Gmail inbox to verify that the email was successfully delivered.
