@@ -23,10 +23,9 @@ Open your .env file in the root directory and update the mail settings with the 
 
     MAIL_MAILER=smtp
     MAIL_HOST=smtp.gmail.com
-    # MAIL_PORT=1025
-    MAIL_PORT=465
+    MAIL_PORT=465  #set port to 465  
     MAIL_USERNAME=jsprgrc548@gmail.com #email that used to sent email
-    MAIL_PASSWORD="ouue prav apts lvzl" #password generated from google app password
+    MAIL_PASSWORD="ouue prav apts lvzl" #**** **** **** **** #password generated from google app password
     MAIL_ENCRYPTION=tls
     MAIL_FROM_ADDRESS="jsprgrc548@gmail.com" #email that used to sent email
     MAIL_FROM_NAME="${APP_NAME}"
@@ -137,4 +136,5 @@ STEP 7: Go to views, create this mail/test-email.blade.php and put this sample c
 
 
 STEP 8: Test the Configuration
+
 Start your local server and visit the route you created "/testroute". Check your Gmail inbox to verify that the email was successfully delivered.
